@@ -90,9 +90,9 @@ class Down(tf.keras.layers.Layer):
 
 
 
-# class UNet(nn.Module):
-#     def __init__(self, c_in=3, c_out=3, time_dim=256, device="cuda"):
-#         super().__init__()
+class UNet(tf.keras.Model):
+    def __init__(self, c_in=3, c_out=3, time_dim=256):
+        super().__init__()
 #         self.device = device
 #         self.time_dim = time_dim
 #         self.inc = DoubleConv(c_in, 64)
@@ -115,15 +115,13 @@ class Down(tf.keras.layers.Layer):
 #         self.sa6 = SelfAttention(64, 64)
 #         self.outc = nn.Conv2d(64, c_out, kernel_size=1)
 
-#     def pos_encoding(self, t, channels):
-#         inv_freq = 1.0 / (
-#             10000
-#             ** (torch.arange(0, channels, 2, device=self.device).float() / channels)
-#         )
-#         pos_enc_a = torch.sin(t.repeat(1, channels // 2) * inv_freq)
-#         pos_enc_b = torch.cos(t.repeat(1, channels // 2) * inv_freq)
-#         pos_enc = torch.cat([pos_enc_a, pos_enc_b], dim=-1)
-#         return pos_enc
+    def pos_encoding(self, t, channels):
+        inv_freq = 1.0 / (tf.range(0, channels, delta=2, dtype=float) / channels)
+
+        pos_enc_a = torch.sin(t.repeat(1, channels // 2) * inv_freq)
+        pos_enc_b = torch.cos(t.repeat(1, channels // 2) * inv_freq)
+        pos_enc = torch.cat([pos_enc_a, pos_enc_b], dim=-1)
+        return pos_enc
 
 #     def forward(self, x, t):
 #         t = t.unsqueeze(-1).type(torch.float)

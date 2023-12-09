@@ -53,7 +53,6 @@ class Diffusion:
         for i in tqdm(reversed(range(1, self.noise_steps)), position=0):
 
             t = (np.ones(n) * i).astype(np.int32)
-
             pred_noise = model(x, t)
 
             alpha = self.alpha[t][:, None, None, None]
